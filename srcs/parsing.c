@@ -6,7 +6,7 @@
 /*   By: brhajji- <brhajji-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 11:29:58 by brhajji-          #+#    #+#             */
-/*   Updated: 2022/03/04 16:51:30 by brhajji-         ###   ########.fr       */
+/*   Updated: 2022/03/11 16:15:25 by brhajji-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,5 @@ int	check_file(char *file)
 		close(fd);
 		return (-2);
 	}
-	return (access(file, F_OK));
+	return (access(file, R_OK));
 }

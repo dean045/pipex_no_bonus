@@ -6,7 +6,7 @@
 /*   By: brhajji- <brhajji-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 10:16:18 by brhajji-          #+#    #+#             */
-/*   Updated: 2022/03/04 15:28:16 by brhajji-         ###   ########.fr       */
+/*   Updated: 2022/03/11 16:37:49 by brhajji-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,13 @@ int	init_input(char **av, t_input **input, char **envp)
 	(*input)->cmd[1].arg = tmp;
 	(*input)->tmp = av[4];
 	if (!check_file(av[1]))
-	{
 		(*input)->f1 = open(av[1], O_RDONLY);
-		return (0);
-	}
-	else if (check_file(av[1]) == -2)
-		ft_printf("Infile : The infile is a directory.\n");
 	else
+	{
+		(*input)->f1 = -1;
 		perror("Infile ");
-	return (1);
+	}
+	return (0);
 }
 
 int	main(int ac, char **av, char **envp)

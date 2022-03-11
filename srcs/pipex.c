@@ -6,7 +6,7 @@
 /*   By: brhajji- <brhajji-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 16:40:10 by brhajji-          #+#    #+#             */
-/*   Updated: 2022/03/04 16:55:19 by brhajji-         ###   ########.fr       */
+/*   Updated: 2022/03/11 16:51:27 by brhajji-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,30 +25,30 @@ int	check_f2(t_input *input)
 
 void	run(t_input *input, int cmd, char **envp)
 {
-	if (check_cmd(input, cmd))
+	if (cmd == 1 && check_f2(input))
+		exit(clean_pipex(input, 1));
+	if (!check_cmd(input, cmd))
+		return (perror("Command "));
+	if (cmd == 0)
 	{
-		if (cmd == 0)
-		{
-			dup2(input->f1, STDIN_FILENO);
-			dup2(input->fd[1], STDOUT_FILENO);
-			close(input->fd[0]);
-		}
-		else if (cmd == 1)
-		{
-			if (check_f2(input))
-				exit(clean_pipex(input, 1));
-			dup2(input->f2, STDOUT_FILENO);
-			dup2(input->fd[0], STDIN_FILENO);
-			close(input->fd[1]);
-		}
-		if (execve(input->cmd[cmd].cmd, input->cmd[cmd].arg, envp) == -1)
-		{
-			perror("Execve ");
+		if (input->f1 < 0)
 			exit(clean_pipex(input, 1));
-		}
+		dup2(input->f1, STDIN_FILENO);
+		dup2(input->fd[1], STDOUT_FILENO);
+		close(input->fd[0]);
 	}
-	else
-		perror("Command ");
+	else if (cmd == 1)
+	{
+		dup2(input->f2, STDOUT_FILENO);
+		dup2(input->fd[0], STDIN_FILENO);
+		close(input->fd[1]);
+	}
+	if (execve(input->cmd[cmd].cmd, input->cmd[cmd].arg, envp) == -1)
+	{
+		perror("Execve ");
+		exit(clean_pipex(input, 1));
+	}
+	clean_pipex(input, 0);
 }
 
 void	pipex(t_input *input, char **envp)
